@@ -1,7 +1,7 @@
 vm_id: 1177
 template_name: Sucre-APP
 computer_name: Sucre-APP
-sql_server_name: Sucre-SQL
+sql_server_name: Sucre-Sage2
 vm_admin_pass: azerty123!
 drive_size_gb: 32
 vm_bridge: VLAN2688
