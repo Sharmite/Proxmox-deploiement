@@ -1,0 +1,10 @@
+---
+- name: Auto logon
+  community.windows.win_auto_logon:
+    username: "{{ domain_ad }}\\Administrateur"
+    password: "{{ vm_admin_pass }}"
+    logon_count: 1
+
+- name: Redémarre la VM
+  ansible.windows.win_reboot:
+  ignore_errors: true

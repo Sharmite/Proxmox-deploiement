@@ -1,0 +1,12 @@
+vm_id: 1252
+template_name: Sucre-AD
+computer_name: Sucre-AD
+vm_admin_pass: azerty123!
+domain_ad: sucre
+orga_name: SucreCorp
+drive_size_gb: 32
+vm_bridge: VLAN2688
+vm_ip: 10.26.88.18
+vm_gw: 10.26.88.254
+dns: 8.8.8.8
+adds: enabled

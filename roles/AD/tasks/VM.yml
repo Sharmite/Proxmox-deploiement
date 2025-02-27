@@ -1,0 +1,84 @@
+---
+- name: Création d'un dossier temporaire
+  file:
+    path: /tmp/{{template_name}}
+    state: directory
+
+- name: Générer la configuration du script de paramétrage réseau
+  template: 
+    src: ../templates/set-network.ps1.j2 
+    dest: /tmp/{{template_name}}/set-network.ps1
+
+- name: Générer la configuration du script de paramétrage d'AD
+  template: 
+    src: ../templates/install-adds.ps1.j2 
+    dest: /tmp/{{template_name}}/install-adds.ps1
+
+- name:  Modification du Host AD
+  vars:
+    script_template: |
+      [proxmox]
+      {{ ansible_default_ipv4.address }} ansible_user=admin ansible_python_interpreter=/usr/bin/python3
+
+      [windows]
+      {{ vm_ip }} ansible_connection=winrm ansible_user=Administrateur ansible_password="{{ vm_admin_pass }}" ansible_winrm_server_cert_validation=ignore
+  copy:
+    content: "{{ script_template }}"
+    dest: ../inventory/AD
+  delegate_to: localhost
+  changed_when: true
+      
+- name: Fichier de configuration Windows (autoattend.xml) en template        
+  template:
+    src: ../autounattend.xml.tpl
+    dest: /tmp/{{template_name}}/autounattend.xml
+
+- name: Copier le script d'installation de WinRM dans le dossier temporaire
+  copy: 
+    src: ../files/EnableWinRm.ps1
+    dest: /tmp/{{template_name}}/EnableWinRm.ps1
+  
+- name: Copier le script de désactivation de l'ouverture auto de Windows Server Manager
+  copy: 
+    src: ../files/DisableAutoServerManager.ps1
+    dest: /tmp/{{template_name}}/DisableAutoServerManager.ps1
+    
+- name: Création d'un ISO avec le contenu du dossier temporaire 
+  command: "genisoimage -J -r -o /mnt/pve/ZPOOL-FREENASHDD01/template/iso/{{template_name}}Provision.iso /tmp/{{template_name}}/"
+  register: iso_created 
+
+- name: Suppression des fichiers et dossiers temporaires
+  file:
+    path: /tmp/{{template_name}}
+    state: absent     
+
+- name: Création de la VM
+  command: "qm create {{vm_id}} --name {{template_name}} --sockets {{vm_sockets}} --cores {{vm_cores}} --memory {{vm_memory_mb}} --ide3 file=ZPOOL-FREENASHDD01:iso/virtio-win-0.1.262.iso,media=cdrom --ide2 file={{os_iso_location}},media=cdrom --sata3 file=ZPOOL-FREENASHDD01:iso/{{template_name}}Provision.iso,media=cdrom --net0 model=virtio,bridge={{vm_bridge}},firewall=0 --scsihw virtio-scsi-single --scsi0 {{pve_storage_id}}:{{drive_size_gb}},format=raw --ostype win10 --agent enabled=1,fstrim_cloned_disks=1,type=virtio"
+  become: true
+
+- name: Lancement de la VM
+  command: "qm start {{vm_id}}"
+  become: true
+
+- name: Attente d'installation de l'OS (30 min maximum)
+  command: "qm wait {{vm_id}}"    
+  async: 1800
+  poll: 30  
+  become: true
+
+- name: Ejection des Disques
+  command: "qm set {{vm_id}} --delete sata3 --delete ide2 --delete ide3"
+  become: true
+
+- name: Suppression de l'ISO
+  file:
+    path: /mnt/pve/ZPOOL-FREENASHDD01/template/iso/{{template_name}}Provision.iso
+    state: absent
+
+- name: Redémarrage de la VM (éteinte après la configuration de l'OS)
+  command: "qm start {{vm_id}}"  
+  become: true
+
+- name: Fini !
+  debug:
+    msg: Création de la VM {{template_name}}, avec comme VMID {{vm_id}} terminée.

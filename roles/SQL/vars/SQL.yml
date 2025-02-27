@@ -1,0 +1,14 @@
+vm_id: 1254
+sql_iso_location: ZPOOL-FREENASHDD01:iso/SQL_Std_2017_64Bit_French.iso
+sql_pass: SQLazerty123!
+template_name: Sucre-Sage2
+computer_name: Sucre-Sage2
+vm_admin_pass: azerty123!
+ad_admin_pass: azerty123!
+domain_ad: sucre
+drive_size_gb: 50
+vm_bridge: VLAN2688
+vm_ip: 10.26.88.122
+vm_gw: 10.26.88.254
+dns: 10.26.88.18
+adds: disabled

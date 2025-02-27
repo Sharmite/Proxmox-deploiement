@@ -1,0 +1,71 @@
+---
+- name: Copy de la config sur le bureau
+  win_shell: copy f:\SetupCli.iss c:\Users\Administrateur.{{ domain_ad }}\Desktop
+
+- name: Installation de ServCli
+  win_shell: d:\Sage\ServCli100c_1000.exe /s /f1"c:\Users\Administrateur.{{ domain_ad }}\Desktop\SetupCli.iss"
+
+- name: Cleaning script
+  win_shell: Remove-Item -path c:\Users\Administrateur.{{ domain_ad }}\Desktop\SetupCli.iss -Force
+
+- name: Cleaning scriptv2
+  win_shell: Remove-Item -path c:\Users\Administrateur.{{ domain_ad }}\Desktop\setup.log -Force
+
+- name: 1 Min de pause pour l'installation de ServCli
+  ansible.builtin.pause:
+    minutes: 1
+
+- name: Installation de NET Framework 3.5
+  win_shell: Install-WindowsFeature -Name NET-Framework-Features
+
+- name: Copy de la config sur le bureau
+  win_shell: copy f:\SetupErp1000.iss c:\Users\Administrateur.{{ domain_ad }}\Desktop
+
+- name: Installation de Erp1000
+  win_shell: powershell.exe d:\Sage\Erp100c_1000.exe /s /f1"c:\Users\Administrateur.{{ domain_ad }}\Desktop\SetupErp1000.iss"
+
+- name: Cleaning script
+  win_shell: Remove-Item -path c:\Users\Administrateur.{{ domain_ad }}\Desktop\SetupErp1000.iss -Force
+
+- name: Cleaning script v2
+  win_shell: Remove-Item -path c:\Users\Administrateur.{{ domain_ad }}\Desktop\setup.log -Force
+
+- name: Copy de la config sur le bureau
+  win_shell: copy f:\SetupErp1011Auto.iss c:\Users\Administrateur.{{ domain_ad }}\Desktop
+
+- name: Installation de Erp1011Auto
+  win_shell: d:\Sage\Erp100c_1011Auto.exe /s /f1"c:\Users\Administrateur.{{ domain_ad }}\Desktop\SetupErp1011Auto.iss"
+
+- name: Cleaning script
+  win_shell: Remove-Item -path c:\Users\Administrateur.{{ domain_ad }}\Desktop\SetupErp1011Auto.iss -Force
+
+- name: Cleaning script v2
+  win_shell: Remove-Item -path c:\Users\Administrateur.{{ domain_ad }}\Desktop\setup.log -Force
+
+- name: Droit Lecture Ecriture Répertoire de l'application
+  win_acl:
+    path: "C:\\Program Files (x86)\\Sage\\"
+    user: "{{ domain_ad }}\\SageUsers"
+    rights: "write,read"
+    type: allow
+
+- name: Droit Lecture Ecriture Fichiers communs
+  win_acl:
+    path: "C:\\Program Files (x86)\\Common Files\\Sage"
+    user: "{{ domain_ad }}\\SageUsers"
+    rights: "write,read"
+    type: allow
+
+- name: Droit Lecture Ecriture Répertoire de Sage
+  win_acl:
+    path: "C:\\ProgramData\\Sage\\"
+    user: "{{ domain_ad }}\\SageUsers"
+    rights: "write,read"
+    type: allow
+
+- name: Droit Lecture Ecriture IntuiSage
+  win_acl:
+    path: "C:\\ProgramData\\Sage\\"
+    user: "{{ domain_ad }}\\SageUsers"
+    rights: "write,read"
+    type: allow

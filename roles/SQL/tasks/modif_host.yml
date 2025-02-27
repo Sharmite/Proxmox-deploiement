@@ -1,0 +1,14 @@
+---
+- name:  Modification du Host SQL
+  vars:
+    script_template: |
+      [proxmox]
+      {{ ansible_default_ipv4.address }} ansible_user=admin ansible_python_interpreter=/usr/bin/python3
+
+      [windows]
+      {{ vm_ip }} ansible_connection=winrm ansible_user=Administrateur@{{ domain_ad }}.local ansible_password="{{ ad_admin_pass }}" ansible_winrm_transport=ntlm ansible_winrm_server_cert_validation=ignore
+  copy:
+    content: "{{ script_template }}"
+    dest: ../inventory/SQL
+  delegate_to: localhost
+  changed_when: true

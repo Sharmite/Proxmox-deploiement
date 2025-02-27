@@ -1,0 +1,18 @@
+---
+- name: Dossier MSSQL
+  win_shell: mkdir C:\MSSQL\
+  ignore_errors: true
+
+- name: Dossier MSSQL\BKP
+  win_shell: mkdir C:\MSSQL\BKP\
+  ignore_errors: true
+
+- name: Dossier MSSQL\DATA
+  win_shell: mkdir C:\MSSQL\DATA\
+  ignore_errors: true
+
+- name: Installation de MS SQL 2017 Standard
+  win_shell: e:\setup.exe /Q /IACCEPTSQLSERVERLICENSETERMS /ACTION="install" /PID="PHDV4-3VJWD-N7JVP-FGPKY-XBV89" /FEATURES=SQLEngine,FullText,Conn,BC /INSTANCENAME="SQL2017" /SQLSVCACCOUNT="AUTORITE NT\Système" /SQLSYSADMINACCOUNTS="AUTORITE NT\Système" /AGTSVCSTARTUPTYPE=Automatic /ROLE=AllFeatures_WithDefaults /SECURITYMODE=SQL /SAPWD="{{ sql_pass }}" /INSTALLSQLDATADIR="C:\MSSQL\DATA" /SQLUSERDBDIR="C:\MSSQL\DATA" /SQLUSERDBLOGDIR="C:\MSSQL\DATA" /SQLBACKUPDIR="C:\MSSQL\BKP" /FILESTREAMLEVEL=3 /FILESTREAMSHARENAME="SQL2017" /UpdateEnabled=false
+
+- name: Installation de SSMS
+  win_shell: d:\SSMS\SSMS-Setup-FRA.exe /install /quiet /norestart

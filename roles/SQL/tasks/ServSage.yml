@@ -1,0 +1,12 @@
+---
+- name: Copy de la config sur le bureau
+  win_shell: copy f:\SetupSQL.iss c:\Users\Administrateur.{{ domain_ad }}\Desktop
+
+- name: Installation de ServSQL
+  win_shell: d:\Sage\ServSQL100c_1000.exe /s /f1"c:\Users\Administrateur.{{ domain_ad }}\Desktop\SetupSQL.iss"
+
+- name: Suppression ISS du bureau
+  win_shell: Remove-Item -path c:\Users\Administrateur.{{ domain_ad }}\Desktop\SetupSQL.iss -Force
+
+- name: Suppression du log du bureau
+  win_shell: Remove-Item -path c:\Users\Administrateur.{{ domain_ad }}\Desktop\setup.log -Force

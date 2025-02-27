@@ -1,0 +1,7 @@
+# Script PowerShell pour installer AD DS et promouvoir le serveur en tant que contrôleur de domaine
+
+# Installer le rôle AD DS
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+# Promouvoir le serveur en tant que contrôleur de domaine
+Install-ADDSForest -DomainName "{{ domain_ad }}.local" -SafeModeAdministratorPassword (ConvertTo-SecureString -AsPlainText "{{ vm_admin_pass }}" -Force) -InstallDNS -NoRebootOnCompletion -Force -Confirm:$false

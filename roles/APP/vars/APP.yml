@@ -1,0 +1,26 @@
+vm_id: 1177
+template_name: Sucre-APP
+computer_name: Sucre-APP
+sql_server_name: Sucre-SQL
+vm_admin_pass: azerty123!
+drive_size_gb: 32
+vm_bridge: VLAN2688
+vm_ip: 10.26.88.20
+vm_gw: 10.26.88.254
+dns: 10.26.88.18
+adds: disabled
+
+ad_admin_pass: azerty123!
+domain_ad: sucre
+tsplus: true
+sage: true
+malwarebyte: true
+cle1: 9AX3SDE3
+cle2: PM3RT96Q
+cle3: KEN7VJRH
+raison_sociale: 1
+adresse1: 1
+code_postale: 1
+ville: 1
+telephone: 1
+siret: 1
