@@ -25,3 +25,5 @@ Pour créer un serveur d'APLLI seulement:
         - Attendre
 
 Bien éditer les fichiers vars pour que toutes les ips soit en corrélation ainsi que les domaine et les nom des Ordinateurs
+
+Vidéo exemple du résultat avec site web pour entrer les données : https://www.youtube.com/watch?v=Iy4VtqkdBJk
