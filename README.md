@@ -247,14 +247,10 @@ proxmox-deploiement/
 
 - **Dépôt GitHub :** https://github.com/Sharmite/Proxmox-deploiement
 
-## 📝 Licence
-
-Ce projet est sous licence [à définir].
-
 ## 🤝 Contribution
 
 Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou soumettre une pull request.
 
 ---
 
-**Note :** Assurez-vous de personnaliser toutes les variables selon votre environnement avant le déploiement.
+**Note :** Assurez-vous de personnaliser toutes les variables selon votre environnement avant le déploiement, les variables utilisées sont des exemples et seront différentes pour tous.
