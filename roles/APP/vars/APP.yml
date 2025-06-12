@@ -1,0 +1,30 @@
+vm_id: 12557
+template_name: Alt-APP
+computer_name: Alt-APP
+sql_server_name: Alt-SQL
+vm_admin_pass: 
+drive_size_gb: 32
+vm_bridge: VLAN2688
+vm_ip: 10.26.88.22
+vm_gw: 10.26.88.254
+dns: 10.26.88.20
+adds: disabled
+
+ad_admin_pass: 
+domain_ad: alternance
+tsplus: true
+sage: true
+chrome: true
+firefox: true
+sevenzip: true
+notepadplusplus: true
+malwarebyte: true
+cle1: 
+cle2: 
+cle3: 
+raison_sociale: 1
+adresse1: 1
+code_postale: 1
+ville: 1
+telephone: 1
+siret: 1

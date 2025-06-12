@@ -1,0 +1,89 @@
+- hosts: proxmox
+  vars_files: 
+    - ../host_vars/proxmox.yml
+    - ../roles/SQL/vars/APPSQL.yml
+
+  tasks:
+  - name: Déploiement de la VM
+    include_tasks: ../roles/SQL/tasks/VM.yml
+
+  - name: Forcer le rafraîchissement de l'inventaire
+    meta: refresh_inventory
+
+  - name: 2 Min de pause
+    ansible.builtin.pause:
+      minutes: 2
+
+  - name: Installation tsplus
+    include_tasks: ../roles/APP/tasks/tsplus.yml
+    when: tsplus
+
+  - name: Installation en cours
+    ansible.builtin.pause:
+      minutes: 2
+
+- hosts: windows
+  vars_files: 
+    - ../roles/SQL/vars/APPSQL.yml
+
+  tasks:
+  - name: Ajout du serveur SQL au domaine
+    include_tasks: ../roles/SQL/tasks/ajout_domaine.yml
+  
+  - name: 1 Min de pause
+    ansible.builtin.pause:
+      minutes: 1
+
+- hosts: proxmox
+  vars_files: 
+    - ../roles/SQL/vars/APPSQL.yml
+
+  tasks:
+  - name: Modification du fichier inventaire du serveur SQL
+    include_tasks: ../roles/SQL/tasks/modif_host.yml
+
+  - name: Forcer le rafraîchissement de l'inventaire
+    meta: refresh_inventory
+
+# Partie SQL
+- hosts: windows
+  vars_files: 
+    - ../roles/SQL/vars/APPSQL.yml
+
+  tasks:
+  - name: Config du Windows
+    include_tasks: ../roles/SQL/tasks/config.yml
+
+  - name: 2 Min de pause
+    ansible.builtin.pause:
+      minutes: 2
+
+  - name: Installation de SQL 2017 et SSMS
+    include_tasks: ../roles/SQL/tasks/SQL2017.yml
+
+  - name: Installation Sage côté serveur SQL
+    include_tasks: ../roles/SQL/tasks/ServSage.yml
+
+# Partie Cliente
+  - name: Config du Windows pour Sage 100
+    include_tasks: ../roles/APP/tasks/config.yml
+
+  - name: 2 Min de pause
+    ansible.builtin.pause:
+      minutes: 2
+
+  - name: Installation de Sage
+    include_tasks: ../roles/APP/tasks/sage.yml
+    when: sage
+
+  - name: Désactivation et fermeture du port WinRM
+    include_tasks: ../roles/SQL/tasks/desac_winrm.yml
+
+- hosts: proxmox
+  vars_files: 
+    - ../host_vars/proxmox.yml
+    - ../roles/SQL/vars/APPSQL.yml
+
+  tasks:
+  - name: Détachement des disques de la VM et suppression de l'ISO temporaire
+    include_tasks: ../roles/SQL/tasks/cleanup.yml

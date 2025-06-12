@@ -1,0 +1,74 @@
+- hosts: proxmox
+  vars_files: 
+    - ../host_vars/proxmox.yml
+    - ../roles/APP/vars/APP.yml
+
+  tasks:
+  - name: Déploiement de la VM
+    include_tasks: ../roles/APP/tasks/VM.yml
+
+  - name: Forcer le rafraîchissement de l'inventaire
+    meta: refresh_inventory
+
+  - name: 2 Min de pause
+    ansible.builtin.pause:
+      minutes: 2
+
+  - name: Installation tsplus
+    include_tasks: ../roles/APP/tasks/tsplus.yml
+    when: tsplus
+
+  - name: 1 Min de pause
+    ansible.builtin.pause:
+      minutes: 2
+
+- hosts: windows
+  vars_files: 
+    - ../roles/APP/vars/APP.yml
+
+  tasks:
+  - name: Ajout du serveur APPLI au domaine
+    include_tasks: ../roles/APP/tasks/ajout_domaine.yml
+  
+  - name: 1 Min de pause
+    ansible.builtin.pause:
+      minutes: 1
+
+- hosts: proxmox
+  vars_files: 
+    - ../roles/APP/vars/APP.yml
+
+  tasks:
+  - name: Modification du fichier inventaire du serveur APP
+    include_tasks: ../roles/APP/tasks/modif_host.yml
+
+  - name: Forcer le rafraîchissement de l'inventaire
+    meta: refresh_inventory
+
+- hosts: windows
+  vars_files: 
+    - ../roles/APP/vars/APP.yml
+
+  tasks:
+  - name: Config du Windows pour Sage 100
+    include_tasks: ../roles/APP/tasks/config.yml
+
+  - name: 2 Min de pause
+    ansible.builtin.pause:
+      minutes: 2
+
+  - name: Installation de Sage
+    include_tasks: ../roles/APP/tasks/sage.yml
+    when: sage
+
+  - name: Désactivation et fermeture du port WinRM
+    include_tasks: ../roles/APP/tasks/desac_winrm.yml
+
+- hosts: proxmox
+  vars_files: 
+    - ../host_vars/proxmox.yml
+    - ../roles/APP/vars/APP.yml
+
+  tasks:
+  - name: Détachement des disques de la VM et suppression de l'ISO temporaire
+    include_tasks: ../roles/APP/tasks/cleanup.yml

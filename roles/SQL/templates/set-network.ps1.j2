@@ -1,0 +1,18 @@
+# Define variables
+$interfaceAlias = "Ethernet"  # Modify this to match the name of your network interface
+$ipAddress = "{{ vm_ip }}"
+$prefixLength = {{ vm_prefix }}
+$gateway = "{{ vm_gw }}"
+$dnsServer = "{{ dns }}"
+
+# Remove any existing IP addresses on the interface
+Get-NetIPAddress -InterfaceAlias $interfaceAlias | Remove-NetIPAddress -Confirm:$false
+
+# Configure the IP address and prefix length
+New-NetIPAddress -InterfaceAlias $interfaceAlias -IPAddress $ipAddress -PrefixLength $prefixLength -DefaultGateway $gateway
+
+# Set the DNS server
+Set-DnsClientServerAddress -InterfaceAlias $interfaceAlias -ServerAddresses $dnsServer
+
+# Apply the settings
+Get-NetIPConfiguration -InterfaceAlias $interfaceAlias | Format-List

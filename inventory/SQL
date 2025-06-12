@@ -1,0 +1,5 @@
+[proxmox]
+10.0.20.3 ansible_user=admin ansible_python_interpreter=/usr/bin/python3
+
+[windows]
+10.26.88.25 ansible_connection=winrm ansible_user=Administrateur@alternance.local ansible_password="AZopgh2025!" ansible_winrm_transport=ntlm ansible_winrm_server_cert_validation=ignore

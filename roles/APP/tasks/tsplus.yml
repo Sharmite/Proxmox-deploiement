@@ -1,0 +1,5 @@
+---
+- name: Installer TSPlus
+  command: >
+    /usr/sbin/qm guest exec {{ vm_id }} powershell.exe "d:\TSPlus\Setup-TSplus.exe /VERYSILENT /SUPPRESSMSGBOXES /Addons yes /NORESTART"
+  become: true

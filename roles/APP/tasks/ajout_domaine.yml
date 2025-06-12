@@ -1,0 +1,8 @@
+---
+- name: Ajout du host au domaine
+  win_shell: |
+    $Password = ConvertTo-SecureString "{{ ad_admin_pass }}" -AsPlainText -Force
+    $Credential = New-Object System.Management.Automation.PSCredential("{{ domain_ad }}\Administrateur", $Password)
+
+    Add-Computer -DomainName {{ domain_ad }}.local -Credential $Credential -Restart
+  ignore_errors: true

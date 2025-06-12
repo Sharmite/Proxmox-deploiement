@@ -1,0 +1,13 @@
+---
+- name: Ejection des Disques
+  command: "qm set {{vm_id}} --delete ide2 --delete sata3 --delete ide0"
+  become: true
+
+- name: Suppression de l'ISO
+  file:
+    path: /mnt/pve/ZPOOL-FREENASHDD01/template/iso/{{template_name}}Provision.iso
+    state: absent
+
+- name: Redémarrage VM
+  command: "qm reboot {{vm_id}}"
+  become: true

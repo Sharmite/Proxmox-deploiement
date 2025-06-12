@@ -1,0 +1,13 @@
+---
+- name: Désactiver le pare-feu Windows
+  win_shell: Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
+
+- name: Auto logon
+  community.windows.win_auto_logon:
+    username: "{{ domain_ad }}\\Administrateur"
+    password: "{{ ad_admin_pass }}"
+    logon_count: 1
+
+- name: Redémarre la VM
+  ansible.windows.win_reboot:
+  ignore_errors: true

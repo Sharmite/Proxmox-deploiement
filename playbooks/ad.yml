@@ -1,0 +1,44 @@
+- hosts: proxmox
+  vars_files: 
+    - ../host_vars/proxmox.yml
+    - ../roles/AD/vars/AD.yml
+
+  tasks:
+  - name: Déploiement de la VM
+    include_tasks: ../roles/AD/tasks/VM.yml
+
+  - name: Forcer le rafraîchissement de l'inventaire
+    meta: refresh_inventory
+  
+  - name: 3 Min de pause
+    ansible.builtin.pause:
+      minutes: 3
+
+- hosts: windows
+  vars_files: 
+    - ../roles/AD/vars/AD.yml
+
+  tasks:
+  - name: Configuration de l'AD
+    include_tasks: ../roles/AD/tasks/config.yml
+  
+  - name: 2 Min de pause
+    ansible.builtin.pause:
+      minutes: 2
+
+- hosts: proxmox
+  vars_files: 
+    - ../host_vars/proxmox.yml
+    - ../roles/AD/vars/AD.yml
+
+  tasks:
+  - name: Détachement des disques de la VM et suppression de l'ISO temporaire
+    include_tasks: ../roles/AD/tasks/cleanup.yml
+
+- hosts: windows
+  vars_files: 
+    - ../roles/AD/vars/AD.yml
+
+  tasks:
+  - name: Connexion à l'admin du domaine pour charger Windows
+    include_tasks: ../roles/AD/tasks/login_admin.yml

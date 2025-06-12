@@ -1,0 +1,186 @@
+---
+- name: Désactiver le pare-feu Windows
+  win_shell: Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
+
+- name: Résuire UAC
+  win_shell: Set-ItemProperty -Path REGISTRY::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name ConsentPromptBehaviorAdmin -Value 0
+
+- name: Installe des applications de base
+  win_chocolatey:
+    name: 
+      - notepadplusplus
+    state: present
+  when: notepadplusplus
+
+- name: Installe des applications de base
+  win_chocolatey:
+    name: 
+      - 7zip
+    state: present
+  when: sevenzip
+
+- name: Installe des applications de base
+  win_chocolatey:
+    name: 
+      - firefox
+    state: present
+  when: firefox
+
+- name: Installe des applications de base
+  win_chocolatey:
+    name: 
+      - googlechrome
+    state: present
+  when: chrome
+
+- name: Installe Malwarebytes
+  win_chocolatey:
+    name: malwarebytes
+    state: present
+  when: malwarebyte
+
+- name: edi.sage.fr en site de confiance
+  win_shell: |
+    $parentKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains"
+    
+    # Check if parent key exists
+    if (-not (Test-Path $parentKeyPath)) {
+        # Create the parent key if it does not exist
+        New-Item -Path $parentKeyPath -Force | Out-Null
+    }
+
+    # Open the registry key and create the subkey
+    $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains", $true)
+    $newKey = $registryKey.CreateSubKey("edi.sage.fr")
+    $newKey.SetValue("https", 2, [Microsoft.Win32.RegistryValueKind]::DWord)
+    $newKey.Close()
+    $registryKey.Close()
+
+- name: suivi-edi.sage.fr en site de confiance
+  win_shell: |
+    $parentKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains"
+    
+    # Check if parent key exists
+    if (-not (Test-Path $parentKeyPath)) {
+        # Create the parent key if it does not exist
+        New-Item -Path $parentKeyPath -Force | Out-Null
+    }
+
+    # Open the registry key and create the subkey
+    $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains", $true)
+    $newKey = $registryKey.CreateSubKey("suivi-edi.sage.fr")
+    $newKey.SetValue("https", 2, [Microsoft.Win32.RegistryValueKind]::DWord)
+    $newKey.Close()
+    $registryKey.Close()
+
+- name: .sso.services.sage.com en site de confiance
+  win_shell: |
+    $parentKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains"
+    
+    # Check if parent key exists
+    if (-not (Test-Path $parentKeyPath)) {
+        # Create the parent key if it does not exist
+        New-Item -Path $parentKeyPath -Force | Out-Null
+    }
+
+    # Open the registry key and create the subkey
+    $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains", $true)
+    $newKey = $registryKey.CreateSubKey("*.sso.services.sage.com")
+    $newKey.SetValue("https", 2, [Microsoft.Win32.RegistryValueKind]::DWord)
+    $newKey.Close()
+    $registryKey.Close()
+
+- name: depot-edi.sage.fr en site de confiance
+  win_shell: |
+    $parentKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains"
+    
+    # Check if parent key exists
+    if (-not (Test-Path $parentKeyPath)) {
+        # Create the parent key if it does not exist
+        New-Item -Path $parentKeyPath -Force | Out-Null
+    }
+
+    # Open the registry key and create the subkey
+    $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains", $true)
+    $newKey = $registryKey.CreateSubKey("depot-edi.sage.fr")
+    $newKey.SetValue("https", 2, [Microsoft.Win32.RegistryValueKind]::DWord)
+    $newKey.Close()
+    $registryKey.Close()
+
+- name: depot-edi.sage.fr/api/EdiAuthorizations en site de confiance
+  win_shell: |
+    $parentKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains"
+    
+    # Check if parent key exists
+    if (-not (Test-Path $parentKeyPath)) {
+        # Create the parent key if it does not exist
+        New-Item -Path $parentKeyPath -Force | Out-Null
+    }
+
+    # Open the registry key and create the subkey
+    $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains", $true)
+    $newKey = $registryKey.CreateSubKey("depot-edi.sage.fr/api/EdiAuthorizations")
+    $newKey.SetValue("https", 2, [Microsoft.Win32.RegistryValueKind]::DWord)
+    $newKey.Close()
+    $registryKey.Close()
+
+- name: .sage.com en site de confiance
+  win_shell: |
+    $parentKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains"
+    
+    # Check if parent key exists
+    if (-not (Test-Path $parentKeyPath)) {
+        # Create the parent key if it does not exist
+        New-Item -Path $parentKeyPath -Force | Out-Null
+    }
+
+    # Open the registry key and create the subkey
+    $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains", $true)
+    $newKey = $registryKey.CreateSubKey("*.sage.com")
+    $newKey.SetValue("https", 2, [Microsoft.Win32.RegistryValueKind]::DWord)
+    $newKey.Close()
+    $registryKey.Close()
+
+- name: edifrontproduction.blob.core.windows.net en site de confiance
+  win_shell: |
+    $parentKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains"
+    
+    # Check if parent key exists
+    if (-not (Test-Path $parentKeyPath)) {
+        # Create the parent key if it does not exist
+        New-Item -Path $parentKeyPath -Force | Out-Null
+    }
+
+    # Open the registry key and create the subkey
+    $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains", $true)
+    $newKey = $registryKey.CreateSubKey("edifrontproduction.blob.core.windows.net")
+    $newKey.SetValue("https", 2, [Microsoft.Win32.RegistryValueKind]::DWord)
+    $newKey.Close()
+    $registryKey.Close()
+
+- name: depot-edi.sage.fr/odata/* en site de confiance
+  win_shell: |
+    $parentKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains"
+    
+    # Check if parent key exists
+    if (-not (Test-Path $parentKeyPath)) {
+        # Create the parent key if it does not exist
+        New-Item -Path $parentKeyPath -Force | Out-Null
+    }
+
+    # Open the registry key and create the subkey
+    $registryKey = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\EscDomains", $true)
+    $newKey = $registryKey.CreateSubKey("depot-edi.sage.fr/odata/*")
+    $newKey.SetValue("https", 2, [Microsoft.Win32.RegistryValueKind]::DWord)
+    $newKey.Close()
+    $registryKey.Close()
+
+- name: Auto logon
+  community.windows.win_auto_logon:
+    username: "{{ domain_ad }}\\Administrateur"
+    password: "{{ ad_admin_pass }}"
+    logon_count: 1
+
+- name: Redémarre la VM
+  ansible.windows.win_reboot:
+  ignore_errors: true

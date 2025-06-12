@@ -1,0 +1,17 @@
+---
+- name: Désactiver le pare-feu Windows
+  win_shell: Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
+
+- name: Création des OU et du groupe Utilisateurs Sage
+  win_shell: |
+    New-ADOrganizationalUnit -Name "{{ orga_name }}" -Path "DC={{ domain_ad }},DC=local"
+
+    New-ADOrganizationalUnit -Name "Utilisateurs" -Path "OU={{ orga_name }},DC={{ domain_ad }},DC=local"
+    New-ADOrganizationalUnit -Name "Serveur TSE" -Path "OU={{ orga_name }},DC={{ domain_ad }},DC=local"
+    New-ADOrganizationalUnit -Name "Groupes" -Path "OU={{ orga_name }},DC={{ domain_ad }},DC=local"
+
+    New-ADGroup -Name "Utilisateurs Sage" -SamAccountName SageUsers -GroupCategory Security -GroupScope DomainLocal -DisplayName "Utilisateurs Sage" -Path "OU=Groupes,OU={{ orga_name }},DC={{ domain_ad }},DC=local" -Description "Les membres de ce groupe peuvent utiliser Sage."
+
+- name: Changer de nom PC
+  win_shell: Rename-Computer -NewName "{{computer_name}}" -Restart
+  ignore_errors: true

@@ -1,0 +1,6 @@
+os_iso_location: ZPOOL-FREENASHDD01:iso/SW_DVD9_Win_Server_STD_CORE_2022_2108.9_64Bit_French_DC_STD_MLF_X23-14510.ISO
+pve_storage_id: ZPOOL-FREENASHDD01
+vm_cores: "2"
+vm_sockets: "2"
+vm_memory_mb: "8192"
+vm_prefix: "24"

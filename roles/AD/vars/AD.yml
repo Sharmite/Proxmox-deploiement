@@ -1,0 +1,12 @@
+vm_id: 12555
+template_name: Alt-AD
+computer_name: Alt-AD
+vm_admin_pass: 
+domain_ad: alternance
+orga_name: Alternance
+drive_size_gb: 32
+vm_bridge: VLAN2688
+vm_ip: 10.26.88.20
+vm_gw: 10.26.88.254
+dns: 8.8.8.8
+adds: enabled

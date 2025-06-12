@@ -1,0 +1,15 @@
+vm_id: 12556
+sql_iso_location: ZPOOL-FREENASHDD01:iso/SQL_Std_2017_64Bit_French.iso
+sql_pass: 
+template_name: Alt-SQL
+computer_name: Alt-SQL
+vm_admin_pass: 
+ad_admin_pass: 
+domain_ad: alternance
+drive_size_gb: 50
+vm_bridge: VLAN2688
+vm_ip: 10.26.88.21
+vm_gw: 10.26.88.254
+dns: 10.26.88.20
+adds: disabled
+appsql: false
