@@ -1,1 +1,5 @@
 READ_ME
+roles/AD/vars/AD.yml
+roles/SQL/vars/SQL.yml
+roles/SQL/vars/APPSQL.yml
+roles/APP/vars/APP.yml
